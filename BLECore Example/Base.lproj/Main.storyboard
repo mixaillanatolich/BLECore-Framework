@@ -69,18 +69,30 @@
                     <view key="view" contentMode="scaleToFill" id="CyD-SO-yMk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BgBlueImage" translatesAutoresizingMaskIntoConstraints="NO" id="Mxh-Be-ZBH">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Mxh-Be-ZBH" secondAttribute="bottom" id="ATu-OK-fgL"/>
+                            <constraint firstItem="Mxh-Be-ZBH" firstAttribute="top" secondItem="CyD-SO-yMk" secondAttribute="top" id="LA7-zf-Cj4"/>
+                            <constraint firstItem="luQ-jd-y1h" firstAttribute="trailing" secondItem="Mxh-Be-ZBH" secondAttribute="trailing" id="PaR-bi-Blc"/>
+                            <constraint firstItem="Mxh-Be-ZBH" firstAttribute="leading" secondItem="luQ-jd-y1h" secondAttribute="leading" id="uRZ-AB-INC"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="luQ-jd-y1h"/>
                     </view>
                     <navigationItem key="navigationItem" id="gSo-Er-Aus"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="omT-s7-NDx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1542" y="23"/>
+            <point key="canvasLocation" x="1541.5999999999999" y="22.906403940886701"/>
         </scene>
     </scenes>
     <resources>
         <image name="BGImage" width="320" height="568"/>
         <image name="BLEIcon" width="172" height="172"/>
+        <image name="BgBlueImage" width="666.5" height="1183.5"/>
     </resources>
 </document>
