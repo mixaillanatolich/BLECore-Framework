@@ -7,23 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05B6C7E523F1BD84002431E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B6C7E423F1BD84002431E8 /* AppDelegate.swift */; };
-		05B6C7E723F1BD84002431E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B6C7E623F1BD84002431E8 /* SceneDelegate.swift */; };
-		05B6C7E923F1BD84002431E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B6C7E823F1BD84002431E8 /* ViewController.swift */; };
-		05B6C7EC23F1BD84002431E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B6C7EA23F1BD84002431E8 /* Main.storyboard */; };
-		05B6C7EE23F1BD85002431E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B6C7ED23F1BD85002431E8 /* Assets.xcassets */; };
-		05B6C7F123F1BD85002431E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B6C7EF23F1BD85002431E8 /* LaunchScreen.storyboard */; };
+		0595D71123F1CA7800FDA65D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0595D70723F1CA7800FDA65D /* Assets.xcassets */; };
+		0595D71223F1CA7800FDA65D /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */; };
+		0595D71323F1CA7800FDA65D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0595D70923F1CA7800FDA65D /* LaunchScreen.storyboard */; };
+		0595D71423F1CA7800FDA65D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0595D70B23F1CA7800FDA65D /* Main.storyboard */; };
+		0595D71523F1CA7800FDA65D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70D23F1CA7800FDA65D /* AppDelegate.swift */; };
+		0595D71623F1CA7800FDA65D /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */; };
+		0595D71823F1CA7800FDA65D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D71023F1CA7800FDA65D /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0595D70723F1CA7800FDA65D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
+		0595D70A23F1CA7800FDA65D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0595D70C23F1CA7800FDA65D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0595D70D23F1CA7800FDA65D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		0595D70F23F1CA7800FDA65D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0595D71023F1CA7800FDA65D /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		05B6C7E123F1BD84002431E8 /* BLECore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLECore.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		05B6C7E423F1BD84002431E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		05B6C7E623F1BD84002431E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		05B6C7E823F1BD84002431E8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		05B6C7EB23F1BD84002431E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		05B6C7ED23F1BD85002431E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		05B6C7F023F1BD85002431E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		05B6C7F223F1BD85002431E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,10 +39,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0595D70623F1CA7800FDA65D /* BLECore Example */ = {
+			isa = PBXGroup;
+			children = (
+				0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */,
+				0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */,
+				0595D70D23F1CA7800FDA65D /* AppDelegate.swift */,
+				0595D71023F1CA7800FDA65D /* SceneDelegate.swift */,
+				0595D71923F1CAC400FDA65D /* Storyboards */,
+				0595D70F23F1CA7800FDA65D /* Info.plist */,
+				0595D70723F1CA7800FDA65D /* Assets.xcassets */,
+			);
+			path = "BLECore Example";
+			sourceTree = "<group>";
+		};
+		0595D71923F1CAC400FDA65D /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				0595D70B23F1CA7800FDA65D /* Main.storyboard */,
+				0595D70923F1CA7800FDA65D /* LaunchScreen.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		0595D71A23F1CB0700FDA65D /* BLECore */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = BLECore;
+			sourceTree = "<group>";
+		};
 		05B6C7D823F1BD84002431E8 = {
 			isa = PBXGroup;
 			children = (
-				05B6C7E323F1BD84002431E8 /* BLECore */,
+				0595D71A23F1CB0700FDA65D /* BLECore */,
+				0595D70623F1CA7800FDA65D /* BLECore Example */,
 				05B6C7E223F1BD84002431E8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -51,20 +84,6 @@
 				05B6C7E123F1BD84002431E8 /* BLECore.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		05B6C7E323F1BD84002431E8 /* BLECore */ = {
-			isa = PBXGroup;
-			children = (
-				05B6C7E423F1BD84002431E8 /* AppDelegate.swift */,
-				05B6C7E623F1BD84002431E8 /* SceneDelegate.swift */,
-				05B6C7E823F1BD84002431E8 /* ViewController.swift */,
-				05B6C7EA23F1BD84002431E8 /* Main.storyboard */,
-				05B6C7ED23F1BD85002431E8 /* Assets.xcassets */,
-				05B6C7EF23F1BD85002431E8 /* LaunchScreen.storyboard */,
-				05B6C7F223F1BD85002431E8 /* Info.plist */,
-			);
-			path = BLECore;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,9 +144,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B6C7F123F1BD85002431E8 /* LaunchScreen.storyboard in Resources */,
-				05B6C7EE23F1BD85002431E8 /* Assets.xcassets in Resources */,
-				05B6C7EC23F1BD84002431E8 /* Main.storyboard in Resources */,
+				0595D71423F1CA7800FDA65D /* Main.storyboard in Resources */,
+				0595D71123F1CA7800FDA65D /* Assets.xcassets in Resources */,
+				0595D71323F1CA7800FDA65D /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,29 +157,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B6C7E923F1BD84002431E8 /* ViewController.swift in Sources */,
-				05B6C7E523F1BD84002431E8 /* AppDelegate.swift in Sources */,
-				05B6C7E723F1BD84002431E8 /* SceneDelegate.swift in Sources */,
+				0595D71523F1CA7800FDA65D /* AppDelegate.swift in Sources */,
+				0595D71623F1CA7800FDA65D /* LaunchViewController.swift in Sources */,
+				0595D71223F1CA7800FDA65D /* DeviceListViewController.swift in Sources */,
+				0595D71823F1CA7800FDA65D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		05B6C7EA23F1BD84002431E8 /* Main.storyboard */ = {
+		0595D70923F1CA7800FDA65D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				05B6C7EB23F1BD84002431E8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		05B6C7EF23F1BD85002431E8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				05B6C7F023F1BD85002431E8 /* Base */,
+				0595D70A23F1CA7800FDA65D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		0595D70B23F1CA7800FDA65D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0595D70C23F1CA7800FDA65D /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -284,15 +304,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = BLECore/Info.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 73LTLJAK8K;
+				INFOPLIST_FILE = "$(SRCROOT)/BLECore Example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.m-technologies.BLECore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "All devices";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -302,15 +327,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = BLECore/Info.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 73LTLJAK8K;
+				INFOPLIST_FILE = "$(SRCROOT)/BLECore Example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.m-technologies.BLECore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "All devices";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
