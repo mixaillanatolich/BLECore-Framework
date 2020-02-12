@@ -192,6 +192,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="i07-Sn-s0A" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="luQ-jd-y1h" secondAttribute="leading" symbolic="YES" id="1Dp-Ey-Xhd"/>
                             <constraint firstItem="aGh-uZ-mVy" firstAttribute="top" secondItem="i07-Sn-s0A" secondAttribute="bottom" constant="10" id="7A6-nj-7n3"/>
                             <constraint firstItem="aGh-uZ-mVy" firstAttribute="trailing" secondItem="luQ-jd-y1h" secondAttribute="trailing" id="AKq-B8-4Ow"/>
                             <constraint firstAttribute="bottom" secondItem="Mxh-Be-ZBH" secondAttribute="bottom" id="ATu-OK-fgL"/>

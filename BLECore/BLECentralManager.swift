@@ -45,7 +45,7 @@ public class BLECentralManager: NSObject {
     public typealias DiscoveryDeviceCallbackClosure = (_ isNewDevice: Bool, _ device: BLEPeripheral) -> Void
     fileprivate var discoveryDeviceCallback: DiscoveryDeviceCallbackClosure?
     
-    public typealias DeviceConnectStatusCallbackClosure = (_ status: BLEDeviceConnectStatus, _ device: CBPeripheral?, _ deviceType: BLEDeviceType, _ error: NSError?) -> Void
+    public typealias DeviceConnectStatusCallbackClosure = (_ status: BLEDeviceConnectStatus, _ device: CBPeripheral?, _ deviceType: BLEDeviceType, _ error: BLEError?) -> Void
     fileprivate var deviceConnectStatusCallback: DeviceConnectStatusCallbackClosure?
     
     fileprivate var timeoutWorkItem: DispatchWorkItem?
@@ -274,7 +274,7 @@ extension BLECentralManager: CBCentralManagerDelegate {
             self.peripheral?.delegate = nil
             self.peripheral = nil;
             
-            deviceConnectStatusCallback?(.error, peripheral, deviceType, NSError.init(domain: "CommunicationError", code: 38, userInfo: [NSLocalizedDescriptionKey:"Connection to node failed"]) )
+            deviceConnectStatusCallback?(.error, peripheral, deviceType, BLEError.connection(type: .failToConnect))
         }
     }
     
@@ -301,7 +301,7 @@ extension BLECentralManager {
         self.peripheral?.delegate = nil
         self.peripheral = nil;
         
-        deviceConnectStatusCallback?(.timeoutError, peripheral, deviceType,  NSError.init(domain: "CommunicationError", code: 37, userInfo: [NSLocalizedDescriptionKey:NSLocalizedString("Connect to device timed out", comment: "") ]) )
+        deviceConnectStatusCallback?(.timeoutError, peripheral, deviceType, BLEError.connection(type: .connectionTimeout))
         
     }
     
