@@ -55,7 +55,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="R0Q-Az-N2W"/>
                     <connections>
-                        <segue destination="O8a-VW-wtl" kind="show" identifier="ShowDeviceListScreen" id="ETX-6Z-XhK"/>
+                        <segue destination="O8a-VW-wtl" kind="show" identifier="ShowDeviceListScreen" animates="NO" id="ETX-6Z-XhK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FTq-SQ-aIQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -73,6 +73,22 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BgBlueImage" translatesAutoresizingMaskIntoConstraints="NO" id="Mxh-Be-ZBH">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qae-wo-cbT">
+                                <rect key="frame" x="51" y="82" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="buttonClicked:" destination="O8a-VW-wtl" eventType="touchUpInside" id="4Yf-rv-5t7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0I-vo-hsF">
+                                <rect key="frame" x="221" y="82" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="button2Clicked:" destination="O8a-VW-wtl" eventType="touchUpInside" id="8XI-vT-IGJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
