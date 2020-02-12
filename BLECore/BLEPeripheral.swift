@@ -21,4 +21,8 @@ public class BLEPeripheral {
         self.rssi = RSSI
     }
     
+    func uuid() -> String {
+        return peripheral.identifier.uuidString
+    }
+    
 }

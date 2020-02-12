@@ -19,6 +19,8 @@
 		05F609F823F3CDC5009382FD /* ExtObjectOrNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609F723F3CDC4009382FD /* ExtObjectOrNil.swift */; };
 		05F609FA23F3DA45009382FD /* BLEDevicePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609F923F3DA45009382FD /* BLEDevicePeripheral.swift */; };
 		05F609FC23F3E39F009382FD /* BLEPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609FB23F3E39F009382FD /* BLEPeripheral.swift */; };
+		05F609FE23F4126F009382FD /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609FD23F4126F009382FD /* BaseViewController.swift */; };
+		05F60A0023F415C6009382FD /* DiscoveredDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609FF23F415C6009382FD /* DiscoveredDeviceTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		05F609F723F3CDC4009382FD /* ExtObjectOrNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtObjectOrNil.swift; sourceTree = "<group>"; };
 		05F609F923F3DA45009382FD /* BLEDevicePeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDevicePeripheral.swift; sourceTree = "<group>"; };
 		05F609FB23F3E39F009382FD /* BLEPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPeripheral.swift; sourceTree = "<group>"; };
+		05F609FD23F4126F009382FD /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		05F609FF23F415C6009382FD /* DiscoveredDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveredDeviceTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +56,10 @@
 		0595D70623F1CA7800FDA65D /* BLECore Example */ = {
 			isa = PBXGroup;
 			children = (
+				05F609FD23F4126F009382FD /* BaseViewController.swift */,
 				0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */,
 				0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */,
+				05F609FF23F415C6009382FD /* DiscoveredDeviceTableViewCell.swift */,
 				0595D70D23F1CA7800FDA65D /* AppDelegate.swift */,
 				0595D71023F1CA7800FDA65D /* SceneDelegate.swift */,
 				0595D71923F1CAC400FDA65D /* Storyboards */,
@@ -181,10 +187,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				05F609F623F3CD9F009382FD /* LogsHelper.swift in Sources */,
+				05F60A0023F415C6009382FD /* DiscoveredDeviceTableViewCell.swift in Sources */,
 				05F609F823F3CDC5009382FD /* ExtObjectOrNil.swift in Sources */,
 				0595D71523F1CA7800FDA65D /* AppDelegate.swift in Sources */,
 				05F609FA23F3DA45009382FD /* BLEDevicePeripheral.swift in Sources */,
 				05F609FC23F3E39F009382FD /* BLEPeripheral.swift in Sources */,
+				05F609FE23F4126F009382FD /* BaseViewController.swift in Sources */,
 				05F609F323F3C8FB009382FD /* BLECentralManager.swift in Sources */,
 				0595D71623F1CA7800FDA65D /* LaunchViewController.swift in Sources */,
 				0595D71223F1CA7800FDA65D /* DeviceListViewController.swift in Sources */,
