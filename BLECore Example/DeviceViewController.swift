@@ -17,7 +17,8 @@ class DeviceViewController: BaseViewController {
     }
     
     @IBAction func sendCmdButtonClicked(_ sender: Any) {
-        let request = BLERequest(rawData: [("$0;".data(using: .utf8) ?? Data())], requestCharacteristic: "FFE1", responseCharacteristic: "FFE1")
+        let request = GyverRequest(request: "0", requestCharacteristic: "FFE1", responseCharacteristic: "FFE1")
+        //let request = BLERequest(rawData: "$0;".hexData(), requestCharacteristic: "FFE1", responseCharacteristic: "FFE1")
         request.isWaitResponse = true
         request.isWriteWithResponse = true
         request.mode = .write

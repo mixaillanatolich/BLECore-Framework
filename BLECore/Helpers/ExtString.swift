@@ -27,6 +27,10 @@ extension String {
         return data
     }
     
+    func hexData() -> Data {
+        return data(using: .utf8) ?? Data()
+    }
+    
     func hexadecimalString() -> String? {
         return data(using: .utf8)?
             .hexadecimal()

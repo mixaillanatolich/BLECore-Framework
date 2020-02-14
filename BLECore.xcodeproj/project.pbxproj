@@ -12,6 +12,7 @@
 		050E4E8323F52053006549A1 /* BLECommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E4E8223F52053006549A1 /* BLECommand.swift */; };
 		050E4E8523F520A9006549A1 /* BLERequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E4E8423F520A9006549A1 /* BLERequest.swift */; };
 		050E4E8723F520DC006549A1 /* BLEResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E4E8623F520DC006549A1 /* BLEResponse.swift */; };
+		0544898723F70E5A009D8A67 /* GyverRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0544898623F70E5A009D8A67 /* GyverRequest.swift */; };
 		0595D71123F1CA7800FDA65D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0595D70723F1CA7800FDA65D /* Assets.xcassets */; };
 		0595D71223F1CA7800FDA65D /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */; };
 		0595D71323F1CA7800FDA65D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0595D70923F1CA7800FDA65D /* LaunchScreen.storyboard */; };
@@ -37,6 +38,7 @@
 		050E4E8223F52053006549A1 /* BLECommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECommand.swift; sourceTree = "<group>"; };
 		050E4E8423F520A9006549A1 /* BLERequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERequest.swift; sourceTree = "<group>"; };
 		050E4E8623F520DC006549A1 /* BLEResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEResponse.swift; sourceTree = "<group>"; };
+		0544898623F70E5A009D8A67 /* GyverRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyverRequest.swift; sourceTree = "<group>"; };
 		0595D70723F1CA7800FDA65D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		0595D70A23F1CA7800FDA65D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		0595D70623F1CA7800FDA65D /* BLECore Example */ = {
 			isa = PBXGroup;
 			children = (
+				0544898623F70E5A009D8A67 /* GyverRequest.swift */,
 				05F609FD23F4126F009382FD /* BaseViewController.swift */,
 				0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */,
 				0595D70823F1CA7800FDA65D /* DeviceListViewController.swift */,
@@ -217,6 +220,7 @@
 				0595D71523F1CA7800FDA65D /* AppDelegate.swift in Sources */,
 				050E4E8323F52053006549A1 /* BLECommand.swift in Sources */,
 				05F609FA23F3DA45009382FD /* BLEDevicePeripheral.swift in Sources */,
+				0544898723F70E5A009D8A67 /* GyverRequest.swift in Sources */,
 				05F609FC23F3E39F009382FD /* BLEPeripheral.swift in Sources */,
 				050E4E8523F520A9006549A1 /* BLERequest.swift in Sources */,
 				05F60A0223F42137009382FD /* BLEError.swift in Sources */,

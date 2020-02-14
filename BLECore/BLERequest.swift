@@ -20,7 +20,7 @@ public class BLERequest: NSObject {
     var mode:BLERequestMode = .read
     var isWaitResponse = false
     var isWriteWithResponse = true
-    var data = [Data()]
+    var data = Data()
     var timeout: Int = 10
     var sendPayloadTimeout: TimeInterval = 0.01
     var retryCount: Int = 0
@@ -30,7 +30,7 @@ public class BLERequest: NSObject {
         self.responseCharacteristicId = responseCharacteristic
     }
     
-    init(rawData: [Data]?, requestCharacteristic: String, responseCharacteristic: String) {
+    init(rawData: Data?, requestCharacteristic: String, responseCharacteristic: String) {
         self.requestCharacteristicId = requestCharacteristic
         self.responseCharacteristicId = responseCharacteristic
         if let rawData = rawData {
@@ -39,7 +39,7 @@ public class BLERequest: NSObject {
     }
     
     func rawData() -> [Data] {
-        return data
+        return [data]
     }
     
     func handleRawResponse(_ rawResponse: Data) -> (Bool, BLEResponse?) {
