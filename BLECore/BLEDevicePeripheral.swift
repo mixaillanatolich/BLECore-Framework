@@ -16,6 +16,8 @@ class BLEDevicePeripheral: NSObject {
     
     fileprivate var responseBuf = Data()
      
+    //TODO maybe create a model with expected service and characteristics into it
+    
     fileprivate var serviceUUIDs = [CBUUID]()
     fileprivate var cbServices: [CBService]?
     
@@ -75,22 +77,6 @@ class BLEDevicePeripheral: NSObject {
         self.peripheral.discoverServices(serviceUUIDs)
     }
     
-    func isCompletelyConnected() -> Bool {
-        if peripheral.state == .connected {
-            return discoveryCompleted()
-        }
-        return false
-    }
-    
-    fileprivate func discoveryCompleted() -> Bool {
-        if cbServices != nil && cbServices!.count == serviceUUIDs.count
-            && cbCharacteristic != nil && cbCharacteristic!.count == characteristicsUUIDs.count {
-            return true
-        }
-        return false
-    }
-    
-    
     func addCommandToQueue(_ command:BLECommand, highProirity: Bool = false) {
         guard peripheral.state == .connected else {
             dLog("Unable to add command at this time, peripheral is not connected.")
@@ -108,6 +94,21 @@ class BLEDevicePeripheral: NSObject {
              }
          }
          
+    }
+    
+    fileprivate func isCompletelyConnected() -> Bool {
+        if peripheral.state == .connected {
+            return discoveryCompleted()
+        }
+        return false
+    }
+    
+    fileprivate func discoveryCompleted() -> Bool {
+        if cbServices != nil && cbServices!.count == serviceUUIDs.count
+            && cbCharacteristic != nil && cbCharacteristic!.count == characteristicsUUIDs.count {
+            return true
+        }
+        return false
     }
      
     fileprivate func sendCommand(_ command: BLECommand) {
@@ -248,16 +249,6 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
         for cbService in cbServices! {
             peripheral.discoverCharacteristics(characteristicsUUIDs, for: cbService)
         }
-        
-//        let deviceCBServices = peripheral.services?.filter({argService in argService.uuid == serviceUUIDs})
-//        deviceCBService = deviceCBServices?.first
-//
-//        if cbServices != nil {
-//            peripheral.discoverCharacteristics(characteristicsToDiscover, for: cbServices!)
-//        } else {
-//            dLog("missing service")
-//            BLEManager.disconectFromDevice()
-//        }
     }
         
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
@@ -274,12 +265,13 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
             return
         }
         
-        //TODO: refactor 
         if let characteristics = service.characteristics {
             for aCharacteristic in characteristics {
                 if characteristicsUUIDs.contains(aCharacteristic.uuid) {
                     cbCharacteristic?.append(aCharacteristic)
-                    peripheral.setNotifyValue(true, for: aCharacteristic)
+                    if aCharacteristic.properties.contains(.notify) {
+                        peripheral.setNotifyValue(true, for: aCharacteristic)
+                    }
                 }
             }
         }
