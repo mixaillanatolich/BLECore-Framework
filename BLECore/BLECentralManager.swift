@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-public enum BLEDeviceConnectStatus: Int {
+public enum BLEDeviceConnectStatus: String {
     case unknown
     case connecting
     case connected
@@ -37,8 +37,11 @@ public class BLECentralManager: NSObject {
     fileprivate var isScanning: Bool = false
     fileprivate var isPowerOn: Bool = false
 
-    fileprivate var serviceUUIDs: [CBUUID]? = [CBUUID.init(string: "0000")]
+    fileprivate var serviceDiscoverUUIDs: [CBUUID]? //= [CBUUID.init(string: "0000")]
    // fileprivate var serviceUUIDs: [CBUUID]? = [CBUUID(string: "1827"), CBUUID(string: "1828")]
+    
+    fileprivate var serviceUUIDs = [CBUUID]()
+    fileprivate var characteristicsUUIDs = [CBUUID]()
     
     fileprivate var discoveredDevices = NSMutableSet()
     
@@ -53,6 +56,7 @@ public class BLECentralManager: NSObject {
     var currentDevice: BLEDevicePeripheral? {
         didSet {
             if let device = self.currentDevice {
+                //TODO add timer
                 device.startDiscoveringServices()
             }
         }
@@ -124,7 +128,7 @@ public class BLECentralManager: NSObject {
             return
         }
         
-        self.serviceUUIDs = serviceUUIDs
+        self.serviceDiscoverUUIDs = serviceUUIDs
         
         discoveredDevices.removeAllObjects()
         isScanning = true
@@ -150,12 +154,15 @@ public class BLECentralManager: NSObject {
         return nil
     }
     
-    private func connectToDevice(_ peripheral: CBPeripheral!, deviceType: BLEDeviceType, timeout: TimeInterval? = nil) {
+    public func connectToDevice(_ peripheral: CBPeripheral, deviceType: BLEDeviceType, serviceIds: [CBUUID], characteristicIds: [CBUUID], timeout: TimeInterval? = nil) {
         // If not already connected to a peripheral, then connect to this one
         if ((self.peripheral == nil) || (self.peripheral?.state == CBPeripheralState.disconnected)) {
             
             // Retain the peripheral before trying to connect
             self.peripheral = peripheral
+            
+            self.serviceUUIDs = serviceIds
+            self.characteristicsUUIDs = characteristicIds
             
             // Reset service
             self.currentDevice?.reset()
@@ -200,6 +207,14 @@ public class BLECentralManager: NSObject {
         return isScanning
     }
     
+    func resetConnectionTimeout() {
+        timeoutWorkItem?.cancel()
+    }
+    
+    func relayDeviceConnectStatus(_ status: BLEDeviceConnectStatus, _ error: BLEError?) {
+        deviceConnectStatusCallback?(status, peripheral, deviceType, error)
+    }
+    
 }
 
 extension BLECentralManager: CBCentralManagerDelegate {
@@ -240,9 +255,9 @@ extension BLECentralManager: CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         
         if (peripheral == self.peripheral) {
-            timeoutWorkItem?.cancel()
+           // timeoutWorkItem?.cancel()
             
-            self.currentDevice = BLEDevicePeripheral(initWith: peripheral)
+            self.currentDevice = BLEDevicePeripheral(initWith: peripheral, serviceIds: serviceUUIDs, characteristicIds: characteristicsUUIDs)
             deviceConnectStatusCallback?(.connected, peripheral, deviceType, nil)
         }
     }
@@ -285,13 +300,13 @@ extension BLECentralManager: CBCentralManagerDelegate {
 
 extension BLECentralManager {
     
-    @objc func connectionTimeout() {
+    fileprivate func connectionTimeout() {
         
         guard let peripheral = self.peripheral else {
             return
         }
         
-        guard peripheral.state == .connecting else {
+        guard peripheral.state == .connecting || peripheral.state == .connected else {
             return
         }
             
@@ -302,7 +317,6 @@ extension BLECentralManager {
         self.peripheral = nil;
         
         deviceConnectStatusCallback?(.timeoutError, peripheral, deviceType, BLEError.connection(type: .connectionTimeout))
-        
     }
     
     fileprivate func resetCurrentDevice() {
@@ -315,7 +329,7 @@ extension BLECentralManager {
     fileprivate func startScanDevices() {
         if isScanning && isPowerOn {
             dLog("Start ble scan")
-            centralManager?.scanForPeripherals(withServices: serviceUUIDs, options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
+            centralManager?.scanForPeripherals(withServices: serviceDiscoverUUIDs, options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
         }
     }
     

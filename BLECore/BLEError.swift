@@ -32,6 +32,8 @@ extension BLEError.Enums {
     public enum ConnectionError {
         case failToConnect
         case connectionTimeout
+        case missedServices
+        case missedCharacteristics
         case custom(errorCode: Int?, errorDescription: String?)
     }
 }
@@ -41,6 +43,8 @@ extension BLEError.Enums.ConnectionError: LocalizedError {
         switch self {
             case .failToConnect: return "Fail Connect To Device"
             case .connectionTimeout: return "Connect To Device Timeout"
+            case .missedServices: return "Missed Services"
+            case .missedCharacteristics: return "Missed Characteristics"
             case .custom(_, let errorDescription): return errorDescription
         }
     }
@@ -49,6 +53,8 @@ extension BLEError.Enums.ConnectionError: LocalizedError {
         switch self {
             case .failToConnect: return 100
             case .connectionTimeout: return 101
+            case .missedServices: return 102
+            case .missedCharacteristics: return 103
             case .custom(let errorCode, _): return errorCode
         }
     }
@@ -58,18 +64,35 @@ extension BLEError.Enums.ConnectionError: LocalizedError {
 
 extension BLEError.Enums {
     public enum CommunicationError {
-        //case read(path: String)
-        //case write(path: String, value: Any)
-        case custom(errorDescription: String?)
+        case reseted
+        case disconnected
+        case timeout
+        case updateCharacteristicValue(error: Error)
+        case writeCharacteristicValue(error: Error)
+        case custom(errorCode: Int?, errorDescription: String?)
     }
 }
 
 extension BLEError.Enums.CommunicationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-            //case .read(let path): return ""
-            //case .write(let path, let value): return ""
-            case .custom(let errorDescription): return errorDescription
+            case .reseted: return "Reset connection"
+            case .disconnected: return "Device disconnected"
+            case .timeout: return "Send command timeout"
+            case .updateCharacteristicValue(let error): return "Error update characteristic value \(error)"
+            case .writeCharacteristicValue(let error): return "Error write characteristic value \(error)"
+            case .custom(_, let errorDescription): return errorDescription
+        }
+    }
+    
+    public var errorCode: Int? {
+        switch self {
+            case .reseted: return 200
+            case .disconnected: return 201
+            case .timeout: return 202
+            case .updateCharacteristicValue: return 203
+            case .writeCharacteristicValue: return 204
+            case .custom(let errorCode, _): return errorCode
         }
     }
 }

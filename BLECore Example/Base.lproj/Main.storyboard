@@ -210,11 +210,39 @@
                     <connections>
                         <outlet property="startScanButton" destination="i07-Sn-s0A" id="XeP-uu-GGR"/>
                         <outlet property="tableView" destination="aGh-uZ-mVy" id="UHF-bI-tac"/>
+                        <segue destination="w29-3K-VTl" kind="show" identifier="ShowDeviceControlScreen" id="vhM-hA-vk0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="omT-s7-NDx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1541.5999999999999" y="22.906403940886701"/>
+        </scene>
+        <!--Device View Controller-->
+        <scene sceneID="FQb-Fa-h9a">
+            <objects>
+                <viewController id="w29-3K-VTl" customClass="DeviceViewController" customModule="BLECore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Cgq-WO-FXB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BgBlueImage" translatesAutoresizingMaskIntoConstraints="NO" id="le6-Zl-h48">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="le6-Zl-h48" firstAttribute="top" secondItem="Cgq-WO-FXB" secondAttribute="top" id="GtO-ex-TYp"/>
+                            <constraint firstAttribute="bottom" secondItem="le6-Zl-h48" secondAttribute="bottom" id="lfc-sk-rTo"/>
+                            <constraint firstItem="ZED-YA-cMu" firstAttribute="trailing" secondItem="le6-Zl-h48" secondAttribute="trailing" id="lul-qw-fun"/>
+                            <constraint firstItem="le6-Zl-h48" firstAttribute="leading" secondItem="ZED-YA-cMu" secondAttribute="leading" id="n8Q-aU-1Co"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ZED-YA-cMu"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="k6r-1S-Hsf"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Prs-dD-1lg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2543" y="23"/>
         </scene>
     </scenes>
     <resources>

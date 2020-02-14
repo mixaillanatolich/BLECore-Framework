@@ -31,9 +31,25 @@ class DeviceListViewController: BaseViewController {
                     let index = Array(self.discoveredDevices.keys).firstIndex(of: blePeripheral.uuid())
                     
                     let reloadCellPath = IndexPath(item: index!, section: 0)
-                    self.tableView.reloadRows(at: [reloadCellPath], with: .automatic)
+                    if let cell = self.tableView.cellForRow(at: reloadCellPath) as? DiscoveredDeviceTableViewCell {
+                        cell.updateDeviceRSSI(rssi: blePeripheral.rssi)
+                    }
+                    //self.tableView.reloadRows(at: [reloadCellPath], with: .automatic)
                 }
             }
+        }
+        
+        BLEManager.setupConnectStatusCallback { (connectStatus, peripheral, devType, error) in
+            
+            dLog("conn status: \(connectStatus)")
+            dLog("error: \(error.orNil)")
+            
+            if connectStatus == .ready {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "ShowDeviceControlScreen", sender: self)
+                }
+            }
+            
         }
     }
     
@@ -50,7 +66,8 @@ class DeviceListViewController: BaseViewController {
         } else {
             discoveredDevices = [String: BLEPeripheral]()
             tableView.reloadData()
-            BLEManager.startDiscovery(serviceUUIDs: [CBUUID(string: "1827"), CBUUID(string: "1828")])
+            //UUID: 0000FFE0-0000-1000-8000-00805F9B34FB
+            BLEManager.startDiscovery(serviceUUIDs: [CBUUID(string: "FFE0")])
             startScanButton.setTitle("Stop Scan", for: .normal)
         }
         
@@ -69,37 +86,28 @@ extension DeviceListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:DiscoveredDeviceTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "DiscoveredPeripheralCell")! as! DiscoveredDeviceTableViewCell
-        cell.resetCell()
         
         let device = discoveredDevices[Array(self.discoveredDevices.keys)[indexPath.row]]!
         
         cell.deviceName.text = device.peripheral.name ?? "Unknown"
-        let peripheralRSSI = device.rssi
-        cell.rssiLabel.text = "RSSI: \(peripheralRSSI)"
-        
-        if (peripheralRSSI.intValue > -55) {
-            cell.signalLevelIndicator5.backgroundColor=UIColor.systemOrange
-        }
-        if (peripheralRSSI.intValue > -65) {
-            cell.signalLevelIndicator4.backgroundColor=UIColor.systemOrange
-        }
-        if (peripheralRSSI.intValue > -75) {
-            cell.signalLevelIndicator3.backgroundColor=UIColor.systemOrange
-        }
-        if (peripheralRSSI.intValue > -85) {
-            cell.signalLevelIndicator2.backgroundColor=UIColor.systemOrange
-        }
-        if (peripheralRSSI.intValue > -95) {
-            cell.signalLevelIndicator1.backgroundColor=UIColor.systemOrange
-        }
-        
+        cell.updateDeviceRSSI(rssi: device.rssi)
         
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let device = discoveredDevices[Array(self.discoveredDevices.keys)[indexPath.row]]!
+        
+        if BLEManager.isDiscovering() {
+            startScanButtonClicked(startScanButton!)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // service [CBUUID(string: "FFE0")]
+            // characteristic [CBUUID(string: "FFE1")]
+            BLEManager.connectToDevice(device.peripheral, deviceType: .expectedDevice, serviceIds: [CBUUID(string: "FFE0")], characteristicIds: [CBUUID(string: "FFE1")], timeout: 10.0)
+        }
         
     }
 
