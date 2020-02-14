@@ -19,6 +19,8 @@
 		0595D71523F1CA7800FDA65D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70D23F1CA7800FDA65D /* AppDelegate.swift */; };
 		0595D71623F1CA7800FDA65D /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */; };
 		0595D71823F1CA7800FDA65D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595D71023F1CA7800FDA65D /* SceneDelegate.swift */; };
+		05B08EE423F6B4F6009956DF /* ExtString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B08EE323F6B4F6009956DF /* ExtString.swift */; };
+		05B08EE623F6CBB1009956DF /* ExtData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B08EE523F6CBB1009956DF /* ExtData.swift */; };
 		05F609F323F3C8FB009382FD /* BLECentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609F223F3C8FB009382FD /* BLECentralManager.swift */; };
 		05F609F623F3CD9F009382FD /* LogsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609F523F3CD9F009382FD /* LogsHelper.swift */; };
 		05F609F823F3CDC5009382FD /* ExtObjectOrNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F609F723F3CDC4009382FD /* ExtObjectOrNil.swift */; };
@@ -43,6 +45,8 @@
 		0595D70E23F1CA7800FDA65D /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0595D70F23F1CA7800FDA65D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0595D71023F1CA7800FDA65D /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		05B08EE323F6B4F6009956DF /* ExtString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtString.swift; sourceTree = "<group>"; };
+		05B08EE523F6CBB1009956DF /* ExtData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtData.swift; sourceTree = "<group>"; };
 		05B6C7E123F1BD84002431E8 /* BLECore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLECore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F609F223F3C8FB009382FD /* BLECentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECentralManager.swift; sourceTree = "<group>"; };
 		05F609F523F3CD9F009382FD /* LogsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsHelper.swift; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 			children = (
 				05F609F723F3CDC4009382FD /* ExtObjectOrNil.swift */,
 				05F609F523F3CD9F009382FD /* LogsHelper.swift */,
+				05B08EE323F6B4F6009956DF /* ExtString.swift */,
+				05B08EE523F6CBB1009956DF /* ExtData.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -214,9 +220,11 @@
 				05F609FC23F3E39F009382FD /* BLEPeripheral.swift in Sources */,
 				050E4E8523F520A9006549A1 /* BLERequest.swift in Sources */,
 				05F60A0223F42137009382FD /* BLEError.swift in Sources */,
+				05B08EE423F6B4F6009956DF /* ExtString.swift in Sources */,
 				05F609FE23F4126F009382FD /* BaseViewController.swift in Sources */,
 				05F609F323F3C8FB009382FD /* BLECentralManager.swift in Sources */,
 				050E4E7F23F5193D006549A1 /* DeviceViewController.swift in Sources */,
+				05B08EE623F6CBB1009956DF /* ExtData.swift in Sources */,
 				0595D71623F1CA7800FDA65D /* LaunchViewController.swift in Sources */,
 				050E4E8123F52003006549A1 /* BLEResponseFactory.swift in Sources */,
 				0595D71223F1CA7800FDA65D /* DeviceListViewController.swift in Sources */,

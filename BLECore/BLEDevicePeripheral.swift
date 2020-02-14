@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 
-class BLEDevicePeripheral: NSObject {
+public class BLEDevicePeripheral: NSObject {
 
     fileprivate var peripheral: CBPeripheral
     
@@ -22,7 +22,7 @@ class BLEDevicePeripheral: NSObject {
     fileprivate var cbServices: [CBService]?
     
     fileprivate var characteristicsUUIDs = [CBUUID]()
-    fileprivate var cbCharacteristic: [CBCharacteristic]?
+    fileprivate var cbCharacteristics: [CBCharacteristic]?
     
     fileprivate var responseFactory = BLEResponseFactory()
      
@@ -31,6 +31,9 @@ class BLEDevicePeripheral: NSObject {
     fileprivate var communicationThread = DispatchQueue(label: "com.m-technologies.bluetooth.communication", attributes: DispatchQueue.Attributes.concurrent)
      
     fileprivate var isWaitingFinishCurrentCommand = false
+    
+    let sendCommandDispatchGroup = DispatchGroup()
+    let sendCommandDispatchSemaphore = DispatchSemaphore(value: 0)
      
     fileprivate var commands:[BLECommand] = [] {
         didSet {
@@ -77,7 +80,7 @@ class BLEDevicePeripheral: NSObject {
         self.peripheral.discoverServices(serviceUUIDs)
     }
     
-    func addCommandToQueue(_ command:BLECommand, highProirity: Bool = false) {
+    public func addCommandToQueue(_ command:BLECommand, highProirity: Bool = false) {
         guard peripheral.state == .connected else {
             dLog("Unable to add command at this time, peripheral is not connected.")
             command.error = BLEError.communication(type: .disconnected)
@@ -105,12 +108,22 @@ class BLEDevicePeripheral: NSObject {
     
     fileprivate func discoveryCompleted() -> Bool {
         if cbServices != nil && cbServices!.count == serviceUUIDs.count
-            && cbCharacteristic != nil && cbCharacteristic!.count == characteristicsUUIDs.count {
+            && cbCharacteristics != nil && cbCharacteristics!.count == characteristicsUUIDs.count {
             return true
         }
         return false
     }
      
+    fileprivate func setRequestTimeout(timeout: TimeInterval) {
+        timeoutWorkItem = DispatchWorkItem {
+            guard let item = self.timeoutWorkItem, !item.isCancelled else {
+                return
+            }
+            self.requestTimeout()
+        }
+        communicationThread.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem!)
+    }
+    
     fileprivate func sendCommand(_ command: BLECommand) {
         guard !isWaitingFinishCurrentCommand else {
             return
@@ -118,51 +131,52 @@ class BLEDevicePeripheral: NSObject {
          
         isWaitingFinishCurrentCommand = true
         
-        sendRequest(command)
+        communicationThread.async {
+            self.sendRequest(command)
+        }
     }
      
     fileprivate func sendRequest(_ command: BLECommand) {
          
         let request: BLERequest = command.request
          
-        timeoutWorkItem?.cancel()
-        timeoutWorkItem = DispatchWorkItem {
-            guard let item = self.timeoutWorkItem, !item.isCancelled else {
-                return
-            }
-            self.requestTimeout()
-        }
-        communicationThread.asyncAfter(deadline: .now() + TimeInterval(request.timeout), execute: timeoutWorkItem!)
+        setRequestTimeout(timeout: TimeInterval(request.timeout))
          
         if request.mode == .read {
-            dLog("read Characteristic: \(request.requestCharacteristic)")
-            self.peripheral.readValue(for: request.requestCharacteristic)
-        } else {
-            //TODO: refactor this shit
+            dLog("read Characteristic: \(request.requestCharacteristicId)")
+            self.peripheral.readValue(for: cbCharacteristic(with: request.requestCharacteristicId)!)
+        } else if request.mode == .write {
+            
             let payloads: [Data] = request.rawData()
             
             for aPayload in payloads {
-                dLog("writeValue: \(aPayload as NSData) forCharacteristic: \(request.requestCharacteristic.uuid.uuidString)")
+                dLog("writeValue: \(aPayload as NSData) forCharacteristic: \(request.requestCharacteristicId)")
                 //dLog("timeout: \(command.request.timeout)")
                 self.peripheral.writeValue(aPayload,
-                                           for: request.requestCharacteristic,
+                                           for: cbCharacteristic(with: request.requestCharacteristicId)!,
                                            type: request.isWriteWithResponse ? CBCharacteristicWriteType.withResponse : CBCharacteristicWriteType.withoutResponse)
-                if payloads.count > 1 {
-                   // Thread.sleep(until: Date(timeIntervalSinceNow: 0.01)) for FW upgrade
-                    //Thread.sleep(until: Date(timeIntervalSinceNow: command.request.payloadTimeout))
-                   Thread.sleep(until: Date(timeIntervalSinceNow: 0.01))
+                
+                dLog("waiting send command")
+                let timeoutResult = sendCommandDispatchSemaphore.wait(timeout: .now() + 1.0)
+                dLog("command should be sent")
+                
+                if timeoutResult == .timedOut {
+                    timeoutWorkItem?.cancel()
+                    communicationThread.async {
+                        self.requestTimeout()
+                    }
+                    return
                 }
+                
+//                if payloads.count > 1 {
+//                    // Thread.sleep(until: Date(timeIntervalSinceNow: 0.01)) for FW upgrade
+//                    Thread.sleep(until: Date(timeIntervalSinceNow: command.request.sendPayloadTimeout))
+//                }
             }
               
             if (!request.isWriteWithResponse && !request.isWaitResponse) {
                 command.status = .success
-                isWaitingFinishCurrentCommand = false
-                if commands.count > 0 {
-                    commands.removeFirst()
-                }
-                
-                timeoutWorkItem?.cancel()
-                command.sendCallback()
+                finishRequest(for: command)
             }
         }
     }
@@ -178,15 +192,15 @@ class BLEDevicePeripheral: NSObject {
             dLog("attemptCount: \(command.request.retryCount)")
             isWaitingFinishCurrentCommand = false
             
-            timeoutWorkItem?.cancel()
-            
-            guard commands.first != nil else {
+            guard !commands.isEmpty else {
                 return
             }
             
-            commands.removeFirst()
-            
-            addCommandToQueue(command)
+            addCommandToQueue(command, highProirity: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                self.isWaitingFinishCurrentCommand = false
+                self.commands.removeFirst()
+            }
             
             return
         }
@@ -196,25 +210,38 @@ class BLEDevicePeripheral: NSObject {
         command.sendCallback()
         isWaitingFinishCurrentCommand = false
         
-        timeoutWorkItem?.cancel()
-        
-        guard commands.first != nil else {
+        guard !commands.isEmpty else {
             return
         }
         
         commands.removeFirst()
          
      }
+    
+    fileprivate func finishRequest(for command: BLECommand) {
+        isWaitingFinishCurrentCommand = false
+        timeoutWorkItem?.cancel()
+        if !commands.isEmpty {
+            commands.removeFirst()
+        }
+        command.sendCallback()
+    }
+    
+    fileprivate func cbCharacteristic(with uuid: String) -> CBCharacteristic? {
+        return cbCharacteristics?.filter({ (cbCharacteristic) -> Bool in
+            return cbCharacteristic.uuid.uuidString.lowercased().contains(uuid.lowercased())
+            }).first
+    }
 }
 
 
 
 extension BLEDevicePeripheral: CBPeripheralDelegate {
-    func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+    public func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         dLog("didModifyServices")
     }
         
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+    public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         dLog("didDiscoverServices")
         dLog("peripheral.services \(peripheral.services.orNil)")
         dLog("deviceServiceUUID \(serviceUUIDs)")
@@ -233,7 +260,7 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
         }
         
         cbServices = [CBService]()
-        cbCharacteristic = [CBCharacteristic]()
+        cbCharacteristics = [CBCharacteristic]()
         for pService in services {
             if serviceUUIDs.contains(pService.uuid) {
                 cbServices!.append(pService)
@@ -251,7 +278,7 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
         }
     }
         
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    public func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         dLog("didDiscoverCharacteristicsForService")
         dLog("error discovering characteristics: \(error.orNil)")
         
@@ -268,7 +295,7 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
         if let characteristics = service.characteristics {
             for aCharacteristic in characteristics {
                 if characteristicsUUIDs.contains(aCharacteristic.uuid) {
-                    cbCharacteristic?.append(aCharacteristic)
+                    cbCharacteristics?.append(aCharacteristic)
                     if aCharacteristic.properties.contains(.notify) {
                         peripheral.setNotifyValue(true, for: aCharacteristic)
                     }
@@ -283,169 +310,65 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
             
     }
         
-    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+    public func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         dLog("didUpdateValueForCharacteristic: \(characteristic.uuid.uuidString), error: \(error.orNil)")
+        dLog("characteristic.value: \((characteristic.value as NSData?).orNil)")
         
         guard let command = commands.first else {
             return
         }
         
-        guard command.request.responseCharacteristic == characteristic else {
-            dLog("WTF2 \(command.request.responseCharacteristic)")
+        guard characteristic.uuid.uuidString.lowercased().contains(command.request.responseCharacteristicId.lowercased()) else {
+            dLog("WTF2 \(command.request.responseCharacteristicId)")
             return
         }
         
         if let error = error {
             command.error = BLEError.communication(type: .updateCharacteristicValue(error: error))
             command.status = .fail
-            isWaitingFinishCurrentCommand = false
-            timeoutWorkItem?.cancel()
-            
-            commands.removeFirst()
-            command.sendCallback()
+            finishRequest(for: command)
         }
         
         if command.request.isWaitResponse {
             command.status = .success
-            dLog("characteristic.value: \((characteristic.value as NSData?).orNil)")
             command.rawResponse = characteristic.value ?? Data()
             responseFactory.handleResponse(command)
-            isWaitingFinishCurrentCommand = false
-            
-            timeoutWorkItem?.cancel()
-            
-            commands.removeFirst()
-            command.sendCallback()
+            finishRequest(for: command)
         }
-            
-//        dLog( "Charactertic: \(characteristic.uuid.uuidString)")
-//
-//        guard let value = characteristic.value else {
-//            dLog("got empty msg")
-//            return
-//        }
-//
-//        dLog( "got msg: \(value.hexadecimalString())")
-//
-//        guard let command = commands.first else {
-//            dLog("got notification message")
-//            if let message = responseFactory.handleResponse(rawData: value) {
-//                responseFactory.handleNotificationResponse(message: message)
-//            }
-//            return
-//        }
-//
-//        if let error = error {
-//            command.error = BLEError.communication(type: .updateCharacteristicValue(error: error))
-//            command.status = .fail
-//            isWaitingFinishCurrentCommand = false
-//            timeoutWorkItem?.cancel()
-//
-//            commands.removeFirst()
-//            command.sendCallback()
-//        }
-//
-//                    /*
-//                    // Handle notification messages during wait other responses
-//                   if let message = responseFactory.handleResponse(rawData: value) {
-//                        responseFactory.handleNotificationResponse(message: message)
-//                    }
-//                    */
-//
-//        if command.request.isWaitResponse {
-//
-//            command.rawResponse = value
-//
-//            let needWait = command.handleResponse()
-//
-//            if needWait {
-//                if let message = responseFactory.handleNotificationResponse(rawData: value) {
-//                    dLog("got notification message2")
-//                    responseFactory.handleNotificationResponse(message: message)
-//                }
-//                return
-//            }
-//
-//            command.status = .success
-//            isWaitingFinishCurrentCommand = false
-//
-//            timeoutWorkItem?.cancel()
-//
-//            if let aCommand = commands.first {
-//                if aCommand == command {
-//                    commands.removeFirst()
-//                } else {
-//                    dLog("remove cmd error")
-//                }
-//            } else {
-//                dLog("remove cmd error")
-//            }
-//            command.sendCallback()
-//        }
-            
-            
     }
         
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-            //dLog("didWriteValueForCharacteristic: \(characteristic.uuid.uuidString), error: \(error.orNil)")
+    public func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        dLog("didWriteValueForCharacteristic: \(characteristic.uuid.uuidString), error: \(error.orNil)")
             
+        sendCommandDispatchSemaphore.signal()
+        
         guard let command = commands.first else {
             return
         }
         
-        guard command.request.responseCharacteristic == characteristic else {
-            dLog("WTF3 \(command.request.responseCharacteristic.uuid.uuidString)")
+        guard characteristic.uuid.uuidString.lowercased().contains(command.request.responseCharacteristicId.lowercased()) else {
+            dLog("WTF3 \(command.request.responseCharacteristicId)")
             return
         }
 
         if let error = error {
             command.error = BLEError.communication(type: .writeCharacteristicValue(error: error))
             command.status = .fail
-            isWaitingFinishCurrentCommand = false
-            
-            timeoutWorkItem?.cancel()
-            
-            commands.removeFirst()
-            command.sendCallback()
+            finishRequest(for: command)
             return
         }
         
         if !command.request.isWaitResponse {
             command.status = .success
-            isWaitingFinishCurrentCommand = false
-            
-            commands.removeFirst()
-            
-            timeoutWorkItem?.cancel()
-            command.sendCallback()
+            finishRequest(for: command)
             return
         }
         
-        peripheral.readValue(for: characteristic)
+       // peripheral.readValue(for: characteristic)
     }
         
-    func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
-            //dLog("peripheralIsReadyq")
-
-            
-    //        guard let command = commandQueue.first else {
-    //            return
-    //        }
-    //
-    //        dLog("\(timeoutTimer.orNil)")
-    //
-    //        if !command.request.waitResponse {
-    //            command.commandStatus = .success
-    //            pendingSuccessfulCommand = false
-    //
-    //            commandQueue.removeFirst()
-    //
-    //            timeoutTimer?.invalidate()
-    //            timeoutTimer = nil
-    //            dLog("\(timeoutTimer.orNil)")
-    //            command.sendCallback()
-    //        }
-    //
-    //        dLog("\(timeoutTimer.orNil)")
+    public func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
+        dLog("peripheralIsReadyq")
+        sendCommandDispatchSemaphore.signal()
     }
 }

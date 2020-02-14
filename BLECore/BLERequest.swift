@@ -9,29 +9,30 @@
 import Foundation
 import CoreBluetooth
 
-enum BLERequestMode: Int {
+public enum BLERequestMode: Int {
     case read
     case write
 }
 
-class BLERequest: NSObject {
-    var requestCharacteristic: CBCharacteristic
-    var responseCharacteristic: CBCharacteristic
+public class BLERequest: NSObject {
+    var requestCharacteristicId: String
+    var responseCharacteristicId: String
     var mode:BLERequestMode = .read
     var isWaitResponse = false
     var isWriteWithResponse = true
     var data = [Data()]
     var timeout: Int = 10
+    var sendPayloadTimeout: TimeInterval = 0.01
     var retryCount: Int = 0
     
-    init (requestCharacteristic: CBCharacteristic, responseCharacteristic: CBCharacteristic) {
-        self.requestCharacteristic = requestCharacteristic
-        self.responseCharacteristic = responseCharacteristic
+    init(requestCharacteristic: String, responseCharacteristic: String) {
+        self.requestCharacteristicId = requestCharacteristic
+        self.responseCharacteristicId = responseCharacteristic
     }
     
-    init(rawData: [Data]?, requestCharacteristic: CBCharacteristic, responseCharacteristic: CBCharacteristic) {
-        self.requestCharacteristic = requestCharacteristic
-        self.responseCharacteristic = responseCharacteristic
+    init(rawData: [Data]?, requestCharacteristic: String, responseCharacteristic: String) {
+        self.requestCharacteristicId = requestCharacteristic
+        self.responseCharacteristicId = responseCharacteristic
         if let rawData = rawData {
             data = rawData
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum BLECommandStatus: String {
+public enum BLECommandStatus: String {
     case unknown
     case success
     case fail
@@ -18,7 +18,7 @@ enum BLECommandStatus: String {
 
 typealias ResponseCallbackClosure = (BLECommandStatus, BLEResponse?, BLEError?) -> Void
 
-class BLECommand: NSObject {
+public class BLECommand: NSObject {
     var request: BLERequest
     var response: BLEResponse?
     var rawResponse: Data = Data()
@@ -27,8 +27,8 @@ class BLECommand: NSObject {
     
     var responseCallback: ResponseCallbackClosure?
     
-    init(deviceRequest: BLERequest) {
-        request = deviceRequest
+    init(with request: BLERequest) {
+        self.request = request
     }
     
     func handleResponse() -> Bool {

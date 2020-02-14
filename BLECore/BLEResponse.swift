@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BLEResponse: NSObject {
+public class BLEResponse: NSObject {
     var data: Data?
     var dataArray: [UInt8]?
     
