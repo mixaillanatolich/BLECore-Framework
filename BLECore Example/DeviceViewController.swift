@@ -27,7 +27,7 @@ class DeviceViewController: BaseViewController {
         let command = BLECommand(with: request)
         command.responseCallback = { (status, response, error) in
             dLog("status: \(status)")
-            dLog("response: \(response?.dataAsString().orNil)")
+            dLog("response: \(response?.dataAsString().orNil ?? "")")
             dLog("error: \(error.orNil)")
         }
 
