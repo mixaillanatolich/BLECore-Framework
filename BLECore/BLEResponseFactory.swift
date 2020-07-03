@@ -11,7 +11,9 @@ import Foundation
 class BLEResponseFactory: NSObject {
     
     func handleResponse(_ command: BLECommand) {
-        command.response = BLEResponse(rawData: command.rawResponse)
+        if !command.handleResponse() {
+            command.response = BLEResponse(rawData: command.rawResponse)
+        }
     }
     
     func handleResponse(rawData: Data) -> BLEResponse? {

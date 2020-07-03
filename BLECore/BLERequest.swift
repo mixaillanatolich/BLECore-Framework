@@ -42,7 +42,4 @@ public class BLERequest: NSObject {
         return [data]
     }
     
-    func handleRawResponse(_ rawResponse: Data) -> (Bool, BLEResponse?) {
-        return (true, nil)
-    }
 }
