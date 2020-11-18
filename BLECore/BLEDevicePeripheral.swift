@@ -42,18 +42,18 @@ public class BLEDevicePeripheral: NSObject {
                 isWaitingFinishCurrentCommand = false
             }
             
-            if let command = commands.first, !isWaitingFinishCurrentCommand {
+            if let command = commands.first {
                 sendCommand(command)
             }
         }
     }
     
-    init(initWith cbPeripheral: CBPeripheral, serviceIds: [CBUUID], characteristicIds: [CBUUID]) {
+    required init(initWith cbPeripheral: CBPeripheral, serviceIds: [CBUUID], characteristicIds: [CBUUID], responseFactory: BLEResponseFactory? = nil) {
         peripheral = cbPeripheral
         super.init()
         peripheral.delegate = self
         
-        responseFactory = BLEResponseFactory()
+        self.responseFactory = responseFactory ?? BLEResponseFactory()
 
         serviceUUIDs = serviceIds
         
@@ -125,9 +125,7 @@ public class BLEDevicePeripheral: NSObject {
     }
     
     fileprivate func sendCommand(_ command: BLECommand) {
-        guard !isWaitingFinishCurrentCommand else {
-            return
-        }
+        guard !isWaitingFinishCurrentCommand else { return }
          
         isWaitingFinishCurrentCommand = true
         
@@ -183,22 +181,21 @@ public class BLEDevicePeripheral: NSObject {
      
     fileprivate func requestTimeout() {
          
-        guard let command = commands.first else {
-            return
-        }
+        guard let command = commands.first else { return }
          
         if command.request.retryCount > 0 {
             command.request.retryCount -= 1
             dLog("attemptCount: \(command.request.retryCount)")
-            isWaitingFinishCurrentCommand = false
             
             guard !commands.isEmpty else {
+                isWaitingFinishCurrentCommand = false
                 return
             }
             
             addCommandToQueue(command, highProirity: true)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 self.isWaitingFinishCurrentCommand = false
+                guard !self.commands.isEmpty else { return }
                 self.commands.removeFirst()
             }
             
@@ -210,12 +207,13 @@ public class BLEDevicePeripheral: NSObject {
         command.sendCallback()
         isWaitingFinishCurrentCommand = false
         
-        guard !commands.isEmpty else {
-            return
+        //TODO add remove by ID
+
+        // in main otherwise crash
+        DispatchQueue.main.async { [self] in
+            guard !self.commands.isEmpty else { return }
+            self.commands.removeFirst()
         }
-        
-        commands.removeFirst()
-         
      }
     
     fileprivate func finishRequest(for command: BLECommand) {
@@ -315,6 +313,12 @@ extension BLEDevicePeripheral: CBPeripheralDelegate {
         dLog("characteristic.value: \((characteristic.value as NSData?).orNil)")
         
         guard let command = commands.first else {
+            dLog("no commands in queue")
+            if let value = characteristic.value {
+                if let response = responseFactory.handleNotificationRawResponse(rawData: value) {
+                    responseFactory.handleNotificationResponse(message: response)
+                }
+            }
             return
         }
         

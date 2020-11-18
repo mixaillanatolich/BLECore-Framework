@@ -53,6 +53,8 @@ public class BLECentralManager: NSObject {
     
     fileprivate var timeoutWorkItem: DispatchWorkItem?
     
+    fileprivate var expectedDevicePeripheralType: BLEDevicePeripheral.Type!
+    
     var currentDevice: BLEDevicePeripheral? {
         didSet {
             if let device = self.currentDevice {
@@ -154,9 +156,13 @@ public class BLECentralManager: NSObject {
         return nil
     }
     
-    public func connectToDevice(_ peripheral: CBPeripheral, deviceType: BLEDeviceType, serviceIds: [CBUUID], characteristicIds: [CBUUID], timeout: TimeInterval? = nil) {
+    public func connectToDevice<T:BLEDevicePeripheral>(_ peripheral: CBPeripheral, deviceType: BLEDeviceType,
+                                                       serviceIds: [CBUUID], characteristicIds: [CBUUID],
+                                                       device: T.Type? = nil, timeout: TimeInterval? = nil) {
         // If not already connected to a peripheral, then connect to this one
         if ((self.peripheral == nil) || (self.peripheral?.state == CBPeripheralState.disconnected)) {
+            
+            self.expectedDevicePeripheralType = device ?? BLEDevicePeripheral.self
             
             // Retain the peripheral before trying to connect
             self.peripheral = peripheral
@@ -256,8 +262,7 @@ extension BLECentralManager: CBCentralManagerDelegate {
         
         if (peripheral == self.peripheral) {
            // timeoutWorkItem?.cancel()
-            
-            self.currentDevice = BLEDevicePeripheral(initWith: peripheral, serviceIds: serviceUUIDs, characteristicIds: characteristicsUUIDs)
+            self.currentDevice = expectedDevicePeripheralType.init(initWith: peripheral, serviceIds: serviceUUIDs, characteristicIds: characteristicsUUIDs)
             deviceConnectStatusCallback?(.connected, peripheral, deviceType, nil)
         }
     }
